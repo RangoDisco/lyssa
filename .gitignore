@@ -18,3 +18,8 @@
 ### OS specific files ###
 .DS_STORE
 ### OS specific files ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+/.phpunit.cache/
+###< phpunit/phpunit ###
