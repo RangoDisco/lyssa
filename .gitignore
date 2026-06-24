@@ -9,3 +9,12 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+
+### IDE config files ###
+.vscode
+.idea
+### IDE config files ###
+
+### OS specific files ###
+.DS_STORE
+### OS specific files ###
