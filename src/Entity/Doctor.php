@@ -22,6 +22,10 @@ class Doctor extends GenericEntity
     #[ORM\ManyToOne]
     private ?Media $picture = null;
 
+    #[ORM\ManyToOne(inversedBy: 'doctors')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -47,6 +51,18 @@ class Doctor extends GenericEntity
     public function setPicture(?Media $picture): static
     {
         $this->picture = $picture;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): static
+    {
+        $this->owner = $owner;
 
         return $this;
     }
