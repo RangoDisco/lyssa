@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\MedicationSource;
 use App\Repository\MedicationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -25,6 +26,12 @@ class Medication extends GenericEntity
      */
     #[ORM\OneToMany(targetEntity: Variant::class, mappedBy: 'medication', orphanRemoval: true)]
     private Collection $variants;
+
+    #[ORM\Column(enumType: MedicationSource::class)]
+    private ?MedicationSource $source = MedicationSource::Community;
+
+    #[ORM\ManyToOne]
+    private ?User $owner = null;
 
     public function __construct()
     {
@@ -74,6 +81,30 @@ class Medication extends GenericEntity
                 $variant->setMedication(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSource(): ?MedicationSource
+    {
+        return $this->source;
+    }
+
+    public function setSource(MedicationSource $source): static
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): static
+    {
+        $this->owner = $owner;
 
         return $this;
     }
