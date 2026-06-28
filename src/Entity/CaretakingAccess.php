@@ -17,11 +17,11 @@ class CaretakingAccess extends GenericEntity
     #[ORM\Column(enumType: CaretakerAccessLevel::class)]
     private CaretakerAccessLevel $level = CaretakerAccessLevel::Readonly;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'careTakerAccesses')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $caretaker = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'patientAccesses')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $patient = null;
 
