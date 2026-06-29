@@ -12,13 +12,12 @@ use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Exception\LogicException;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 final class PrescriptionVoter extends Voter
 {
-    public const EDIT = 'PRESCRIPTION_EDIT';
-    public const VIEW = 'PRESCRIPTION_VIEW';
-    public const DELETE = 'PRESCRIPTION_DELETE';
+    public const string EDIT = 'PRESCRIPTION_EDIT';
+    public const string VIEW = 'PRESCRIPTION_VIEW';
+    public const string DELETE = 'PRESCRIPTION_DELETE';
 
     public function __construct(
         private readonly CaretakingAccessRepository     $ca,

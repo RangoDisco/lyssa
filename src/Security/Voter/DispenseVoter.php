@@ -15,9 +15,9 @@ use Symfony\Component\Security\Core\Exception\LogicException;
 
 final class DispenseVoter extends Voter
 {
-    public const EDIT = 'DISPENSE_EDIT';
-    public const VIEW = 'DISPENSE_VIEW';
-    public const DELETE = 'DISPENSE_DELETE';
+    public const string EDIT = 'DISPENSE_EDIT';
+    public const string VIEW = 'DISPENSE_VIEW';
+    public const string DELETE = 'DISPENSE_DELETE';
 
     public function __construct(
         private readonly DispenseRepository             $dispense,
