@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Variant;
+use App\Enum\CaretakerAccessLevel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +16,27 @@ class VariantRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Variant::class);
+    }
+
+    public function hasAccess(Variant $variant, User $user, ?CaretakerAccessLevel $accessLevel = null): bool
+    {
+        $qb = $this->createQueryBuilder('v')
+            ->select('v')
+            ->innerJoin('v.medication', 'm')
+            ->innerJoin(CaretakerAccessLevel::class, 'ca', 'ON', 'ca.patient = pt')
+            ->where('v.variant = :variant')
+            ->setParameter('variant', $variant)
+            ->setParameter(':user', $user)
+            ->setMaxResults(1);
+
+        if ($accessLevel !== null) {
+            $qb->andWhere("m.owner = :user OR (ca.level = :accessLevel AND ca.caretaker = :user)")
+                ->setParameter('accessLevel', $accessLevel);
+        } else {
+            $qb->andWhere("m.owner = :user OR ca.caretaker = :user");
+        }
+
+        return $qb->getQuery()->getOneOrNullResult() === null;
     }
 
     //    /**
