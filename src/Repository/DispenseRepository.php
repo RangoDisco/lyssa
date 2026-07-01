@@ -8,7 +8,6 @@ use App\Entity\User;
 use App\Enum\CaretakerAccessLevel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 
 /**
  * @extends ServiceEntityRepository<Dispense>
