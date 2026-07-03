@@ -30,7 +30,11 @@
         "symfony/ux-twig-component": "^3.2",
         "symfony/validator": "8.1.*",
         "symfony/yaml": "8.1.*",
-        "symfonycasts/verify-email-bundle": "^1.18"
+        "symfonycasts/tailwind-bundle": "^0.14.0",
+        "symfonycasts/verify-email-bundle": "^1.18",
+        "tales-from-a-dev/twig-tailwind-extra": "^1.0.0",
+        "twig/extra-bundle": "*",
+        "twig/html-extra": "^3.12.0"
     },
     "config": {
         "allow-plugins": {
@@ -92,6 +96,7 @@
         "symfony/css-selector": "8.1.*",
         "symfony/maker-bundle": "^1.67",
         "symfony/stopwatch": "8.1.*",
+        "symfony/ux-toolkit": "^3.2",
         "symfony/web-profiler-bundle": "8.1.*"
     }
 }
