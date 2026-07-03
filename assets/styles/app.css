@@ -3,9 +3,6 @@
 /* With AssetMapper... */
 @import '../vendor/tw-animate-css/dist/tw-animate.css';
 @import '../vendor/shadcn/dist/tailwind.css';
-/* ... or with Webpack Encore */
-/* @import "tw-animate-css"; */
-/* @import "shadcn/tailwind.css"; */
 
 @custom-variant dark (&:is(.dark *));
 
