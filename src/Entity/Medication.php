@@ -33,9 +33,16 @@ class Medication extends GenericEntity
     #[ORM\ManyToOne]
     private ?User $owner = null;
 
+    /**
+     * @var Collection<int, MedicationType>
+     */
+    #[ORM\OneToMany(targetEntity: MedicationType::class, mappedBy: 'medication', orphanRemoval: true)]
+    private Collection $medicationTypes;
+
     public function __construct()
     {
         $this->variants = new ArrayCollection();
+        $this->medicationTypes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -105,6 +112,36 @@ class Medication extends GenericEntity
     public function setOwner(?User $owner): static
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MedicationType>
+     */
+    public function getMedicationTypes(): Collection
+    {
+        return $this->medicationTypes;
+    }
+
+    public function addMedicationType(MedicationType $medicationTypes): static
+    {
+        if (!$this->medicationTypes->contains($medicationTypes)) {
+            $this->medicationTypes->add($medicationTypes);
+            $type->setMedication($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedicationType(MedicationType $medicationTypes): static
+    {
+        if ($this->medicationTypes->removeElement($medicationTypes)) {
+            // set the owning side to null (unless already changed)
+            if ($medicationTypes->getMedication() === $this) {
+                $medicationTypes->setMedication(null);
+            }
+        }
 
         return $this;
     }
