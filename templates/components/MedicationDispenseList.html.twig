@@ -1,0 +1,13 @@
+<div class="flex flex-col gap-4 w-full">
+    <twig:Typography:H3>Dispenses</twig:Typography:H3>
+    <div class="flex gap-1">
+        <twig:Button variant="outline" class="rounded-full" size="sm">Dispense</twig:Button>
+        <twig:Button variant="outline" class="rounded-full" size="sm">Prescription</twig:Button>
+    </div>
+    <div class="flex flex-col gap-2">
+        {% for dispense in this.dispenses %}
+            <twig:MedicationDispenseListItem :dispense="dispense" />
+        {% endfor %}
+
+    </div>
+</div>

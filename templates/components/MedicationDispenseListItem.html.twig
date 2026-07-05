@@ -1,0 +1,25 @@
+<twig:Card>
+    <twig:Card:Content class="flex justify-between items-center">
+        <div class="flex gap-4 items-center">
+            <div class="p-[4px] bg-{{ outerScope.outerScope.this.backgroundColor}} rounded-full text-{{ outerScope.outerScope.this.iconColor }}">
+                <twig:ux:icon name="{{ outerScope.outerScope.this.icon }}" size="4"/>
+            </div>
+            <div class="flex flex-col">
+                                <span class="font-bold">
+                                    {% if dispense.doneAt !== null %}
+                                        {{ dispense.doneAt|date("Y-m-d") }}
+                                    {% else %}
+                                        {{ dispense.scheduledAt|date("Y-m-d") }}
+                                    {% endif %}
+                                </span>
+                <div class="flex gap-2 text-muted-foreground">
+                    <span>{{ dispense.variant.dosage }}mg</span>
+                    <span>{{ dispense.variant.format.value|capitalize }}</span>
+                </div>
+            </div>
+        </div>
+        <twig:Button size="icon" variant="ghost" aria-label="More">
+            <twig:ux:icon name="lucide:ellipsis-vertical"/>
+        </twig:Button>
+    </twig:Card:Content>
+</twig:Card>

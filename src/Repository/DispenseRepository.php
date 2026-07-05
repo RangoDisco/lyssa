@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\CaretakingAccess;
 use App\Entity\Dispense;
+use App\Entity\Medication;
 use App\Entity\User;
 use App\Enum\CaretakerAccessLevel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -39,6 +40,17 @@ class DispenseRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getOneOrNullResult() === null;
+    }
+
+    /** @return Dispense[] */
+    public function findByMedication(Medication $medication): array
+    {
+        return $this->createQueryBuilder('d')
+            ->select('d')
+            ->innerJoin('d.variant', 'v')
+            ->where('v.medication = :medication')
+            ->setParameter('medication', $medication)
+            ->getQuery()->getResult();
     }
 
 //    /**

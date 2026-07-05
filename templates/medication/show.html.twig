@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Medication{% endblock %}
+
+{% block body %}
+    <div class="flex flex-col gap-8 items-center w-full">
+        <div class="flex flex-col items-center">
+            <div class="bg-red-400 border-border h-24 w-24 rounded-lg">
+            </div>
+            <twig:Typography:H3>{{ medication.name }}</twig:Typography:H3>
+            {% if type != null %}
+                <p
+                    class="text-muted-foreground font-normal text-md">{{ type.name }}</p>
+            {% endif %}
+        </div>
+
+        <div class="flex flex-col gap-4 w-full">
+            <twig:Typography:H3>Variants</twig:Typography:H3>
+            <div class="flex flex-col gap-2">
+                {% for variant in medication.variants %}
+                    <twig:Card>
+                        <twig:Card:Content class="flex justify-between items-center">
+                            <div class="flex gap-4 items-center">
+                                <span class="font-bold">{{ variant.dosage }}mg</span>
+                                <span>{{ variant.format.value|capitalize }}</span>
+                            </div>
+                            <twig:Button size="icon" variant="ghost" aria-label="More">
+                                <twig:ux:icon name="lucide:ellipsis-vertical"/>
+                            </twig:Button>
+                        </twig:Card:Content>
+                    </twig:Card>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        <twig:MedicationDispenseList :medication="medication" />
+
+        <a href="{{ path('app_medication_index') }}">back to list</a>
+
+        <a href="{{ path('app_medication_edit', {'id': medication.id}) }}">edit</a>
+
+        {{ include('medication/_delete_form.html.twig') }}
+    </div>
+{% endblock %}
