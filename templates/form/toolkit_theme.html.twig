@@ -1,0 +1,35 @@
+{% block form_row %}
+    <twig:Field>
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+        {% if not valid %}{{ form_errors(form) }}{% endif %}
+    </twig:Field>
+{% endblock %}
+
+{% block form_widget_simple %}
+    <twig:Input
+        :type="type|default('text')"
+        id="{{ id }}"
+        name="{{ full_name }}"
+        value="{{ value }}"
+        :required="required"
+        :disabled="disabled"
+        {{ ...attr }}
+    />
+{% endblock %}
+
+{% block form_label %}
+    <twig:Field:Label for="{{ id }}">{{ label ?? name|humanize }}</twig:Field:Label>
+{% endblock %}
+
+{%- block choice_widget_collapsed -%}
+    {%- set _opts -%}
+        {%- if placeholder is not none -%}
+            <option value=""{% if required and value is empty %} selected{% endif %}>{{ placeholder != '' ? (translation_domain is same as(false) ? placeholder : placeholder|trans({}, translation_domain)) }}</option>
+        {%- endif -%}
+        {%- set options = choices -%}{{ block('choice_widget_options') }}
+    {%- endset -%}
+    {%- set _attrs = attr|merge({id: id, name: full_name})|merge(multiple ? {multiple: true} : {}) -%}
+    <twig:Select {{ ..._attrs }}>{{ outerScope._opts|raw }}</twig:Select>
+{%- endblock -%}
+
