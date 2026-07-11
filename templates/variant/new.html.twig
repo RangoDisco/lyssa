@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Variant{% endblock %}
+
+{% block body %}
+    <h1>Create new Variant</h1>
+
+    <div class="max-w-md mx-auto">
+        {{ include('variant/_form.html.twig') }}
+        <a href="{{ path('app_variant_index') }}">back to list</a>
+    </div>
+{% endblock %}

@@ -24,7 +24,7 @@ class Variant extends GenericEntity
     #[ORM\JoinColumn(nullable: false)]
     private ?Medication $medication = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(cascade: ['persist'])]
     private ?Media $picture = null;
 
     #[ORM\Column(enumType: MedicationFormat::class)]

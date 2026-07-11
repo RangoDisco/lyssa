@@ -13,38 +13,23 @@ class Media extends GenericEntity
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 32)]
-    private ?string $path = null;
-
-    #[ORM\Column(length: 253)]
-    private ?string $domain = null;
+    #[ORM\Column(nullable: true)]
+    private ?string $imageName = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPath(): ?string
+    public function setImageName(?string $imageName): self
     {
-        return $this->path;
-    }
-
-    public function setPath(string $path): static
-    {
-        $this->path = $path;
+        $this->imageName = $imageName;
 
         return $this;
     }
 
-    public function getDomain(): ?string
+    public function getImageName(): ?string
     {
-        return $this->domain;
-    }
-
-    public function setDomain(string $domain): static
-    {
-        $this->domain = $domain;
-
-        return $this;
+        return $this->imageName;
     }
 }
