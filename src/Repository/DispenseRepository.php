@@ -8,6 +8,7 @@ use App\Entity\Medication;
 use App\Entity\User;
 use App\Enum\CaretakerAccessLevel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -42,15 +43,13 @@ class DispenseRepository extends ServiceEntityRepository
         return $qb->getQuery()->getOneOrNullResult() === null;
     }
 
-    /** @return Dispense[] */
-    public function findByMedication(Medication $medication): array
+    public function getByMedicationQuery(Medication $medication): QueryBuilder
     {
         return $this->createQueryBuilder('d')
             ->select('d')
             ->innerJoin('d.variant', 'v')
             ->where('v.medication = :medication')
-            ->setParameter('medication', $medication)
-            ->getQuery()->getResult();
+            ->setParameter('medication', $medication);
     }
 
 //    /**

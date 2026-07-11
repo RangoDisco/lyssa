@@ -44,12 +44,11 @@ final class MedicationController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_medication_show', methods: ['GET'])]
-    public function show(Medication $medication, DispenseService $dispenseService): Response
+    public function show(Medication $medication): Response
     {
         return $this->render('medication/show.html.twig', [
             'medication' => $medication,
             'type' => $medication->getMedicationTypes()[0] ?? null,
-            'dispenses' => $dispenseService->getByMedication($medication)
         ]);
     }
 
