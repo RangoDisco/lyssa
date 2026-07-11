@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\CaretakingAccess;
 use App\Entity\User;
 use App\Entity\Variant;
 use App\Enum\CaretakerAccessLevel;
@@ -23,8 +24,8 @@ class VariantRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('v')
             ->select('v')
             ->innerJoin('v.medication', 'm')
-            ->innerJoin(CaretakerAccessLevel::class, 'ca', 'ON', 'ca.patient = pt')
-            ->where('v.variant = :variant')
+            ->innerJoin(CaretakingAccess::class, 'ca', 'ON', 'ca.patient = m.owner')
+            ->where('v = :variant')
             ->setParameter('variant', $variant)
             ->setParameter(':user', $user)
             ->setMaxResults(1);
