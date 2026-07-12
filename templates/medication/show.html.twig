@@ -5,8 +5,15 @@
 {% block body %}
     <div class="flex flex-col gap-8 items-center w-full md:max-w-xl md:mx-auto">
         <div class="flex flex-col items-center">
-            <div class="bg-red-400 border-border h-24 w-24 rounded-lg">
-            </div>
+            <img
+                class="rounded-lg object-cover h-24 w-24 border"
+                src="{{ medication.picture is not null
+                ? asset('uploads/' ~ medication.picture.imageName)
+                : asset('uploads/Loulou-6a510b7e420d12.88227757.jpg') }}"
+                onerror="this.src='{{ asset('uploads/Loulou-6a510b7e420d12.88227757.jpg') }}'"
+                alt="{{ medication.name }}"
+            />
+
             <twig:Typography:H3>{{ medication.name }}</twig:Typography:H3>
             {% if type != null %}
                 <p
@@ -14,8 +21,8 @@
             {% endif %}
         </div>
 
-        <twig:MedicationDispenseList :medication="medication" />
-        <twig:MedicationVariantList :medication="medication" />
+        <twig:MedicationDispenseList :medication="medication"/>
+        <twig:MedicationVariantList :medication="medication"/>
 
         <a href="{{ path('app_medication_index') }}">back to list</a>
 
