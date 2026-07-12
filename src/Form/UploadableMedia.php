@@ -22,9 +22,10 @@ class UploadableMedia extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
-                    new Assert\File(
+                    new Assert\Image(
                         maxSize: '2M',
-                        extensions: ['jpeg', 'jpg', 'png']
+                        mimeTypes: ['image/*'],
+                        mimeTypesMessage: "Please upload a valid image"
                     )
                 ]
             ]);
