@@ -24,9 +24,6 @@ class Variant extends GenericEntity
     #[ORM\JoinColumn(nullable: false)]
     private ?Medication $medication = null;
 
-    #[ORM\ManyToOne(cascade: ['persist'])]
-    private ?Media $picture = null;
-
     #[ORM\Column(enumType: MedicationFormat::class)]
     private ?MedicationFormat $format = null;
 
@@ -55,18 +52,6 @@ class Variant extends GenericEntity
     public function setMedication(?Medication $medication): static
     {
         $this->medication = $medication;
-
-        return $this;
-    }
-
-    public function getPicture(): ?Media
-    {
-        return $this->picture;
-    }
-
-    public function setPicture(?Media $picture): static
-    {
-        $this->picture = $picture;
 
         return $this;
     }

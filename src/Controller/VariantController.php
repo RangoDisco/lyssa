@@ -44,20 +44,8 @@ final class VariantController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $file = $form->get('media')->get('file')->getData();
-
-            if ($file instanceof UploadedFile) {
-                try {
-                    $variant->setPicture($uploader->handleFile($file));
-                } catch (\InvalidArgumentException|FileException) {
-                    $form->get('media')->addError(new FormError("File is invalid."));
-                }
-            }
-
-            if ($form->isValid()) {
-                $entityManager->persist($variant);
-                $entityManager->flush();
-            }
+            $entityManager->persist($variant);
+            $entityManager->flush();
 
             return $this->redirectToRoute('app_variant_index', [], Response::HTTP_SEE_OTHER);
         }

@@ -39,6 +39,9 @@ class Medication extends GenericEntity
     #[ORM\OneToMany(targetEntity: MedicationType::class, mappedBy: 'medication', orphanRemoval: true)]
     private Collection $medicationTypes;
 
+    #[ORM\ManyToOne(cascade: ['persist'])]
+    private ?Media $picture = null;
+
     public function __construct()
     {
         $this->variants = new ArrayCollection();
@@ -142,6 +145,18 @@ class Medication extends GenericEntity
                 $medicationTypes->setMedication(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPicture(): ?Media
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?Media $picture): static
+    {
+        $this->picture = $picture;
 
         return $this;
     }

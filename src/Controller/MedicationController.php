@@ -6,8 +6,13 @@ use App\Entity\Medication;
 use App\Form\MedicationType;
 use App\Repository\MedicationRepository;
 use App\Service\DispenseService;
+use App\Service\Uploader;
 use Doctrine\ORM\EntityManagerInterface;
+use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -24,15 +29,31 @@ final class MedicationController extends AbstractController
     }
 
     #[Route('/new', name: 'app_medication_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(
+        Request                $request,
+        EntityManagerInterface $entityManager,
+        Uploader               $uploader
+    ): Response
     {
         $medication = new Medication();
         $form = $this->createForm(MedicationType::class, $medication);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($medication);
-            $entityManager->flush();
+            $file = $form->get('media')->get('file')->getData();
+
+            if ($file instanceof UploadedFile) {
+                try {
+                    $medication->setPicture($uploader->handleFile($file));
+                } catch (InvalidArgumentException|FileException) {
+                    $form->get('media')->addError(new FormError("File is invalid."));
+                }
+            }
+
+            if ($form->isValid()) {
+                $entityManager->persist($medication);
+                $entityManager->flush();
+            }
 
             return $this->redirectToRoute('app_medication_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -73,7 +94,7 @@ final class MedicationController extends AbstractController
     #[Route('/{id}', name: 'app_medication_delete', methods: ['POST'])]
     public function delete(Request $request, Medication $medication, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$medication->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $medication->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($medication);
             $entityManager->flush();
         }

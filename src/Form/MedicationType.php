@@ -14,6 +14,10 @@ class MedicationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('media', UploadableMedia::class, [
+                'mapped' => false,
+                'required' => false
+            ])
             ->add('name')
             ->add('owner', EntityType::class, [
                 'class' => User::class,

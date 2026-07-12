@@ -55,6 +55,7 @@ final class MedicationControllerTest extends WebTestCase
             'medication[createdAt]' => 'Testing',
             'medication[updatedAt]' => 'Testing',
             'medication[owner]' => 'Testing',
+            'medication[picture]' => 'Testing',
         ]);
 
         self::assertResponseRedirects('/medication');
@@ -73,6 +74,7 @@ final class MedicationControllerTest extends WebTestCase
         $fixture->setCreatedAt('My Title');
         $fixture->setUpdatedAt('My Title');
         $fixture->setOwner('My Title');
+        $fixture->setPicture('My Title');
 
         $this->manager->persist($fixture);
         $this->manager->flush();
@@ -95,6 +97,7 @@ final class MedicationControllerTest extends WebTestCase
         $fixture->setCreatedAt('Value');
         $fixture->setUpdatedAt('Value');
         $fixture->setOwner('Value');
+        $fixture->setPicture('Value');
 
         $this->manager->persist($fixture);
         $this->manager->flush();
@@ -108,6 +111,7 @@ final class MedicationControllerTest extends WebTestCase
             'medication[createdAt]' => 'Something New',
             'medication[updatedAt]' => 'Something New',
             'medication[owner]' => 'Something New',
+            'medication[picture]' => 'Something New',
         ]);
 
         self::assertResponseRedirects('/medication');
@@ -120,6 +124,7 @@ final class MedicationControllerTest extends WebTestCase
         self::assertSame('Something New', $fixture[0]->getCreatedAt());
         self::assertSame('Something New', $fixture[0]->getUpdatedAt());
         self::assertSame('Something New', $fixture[0]->getOwner());
+        self::assertSame('Something New', $fixture[0]->getPicture());
 
         $this->markTestIncomplete('This test was generated');
     }
@@ -133,6 +138,7 @@ final class MedicationControllerTest extends WebTestCase
         $fixture->setCreatedAt('Value');
         $fixture->setUpdatedAt('Value');
         $fixture->setOwner('Value');
+        $fixture->setPicture('Value');
 
         $this->manager->persist($fixture);
         $this->manager->flush();
