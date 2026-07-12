@@ -16,8 +16,8 @@ readonly class Uploader
     const array VALID_EXTENSIONS = ['jpeg', 'jpg', 'png'];
 
     public function __construct(
-        private SluggerInterface                                          $slugger,
-        #[Autowire('%kernel.project_dir%/public/uploads')] private string $uploadDir,
+        private SluggerInterface                       $slugger,
+        #[Autowire('%app.upload_dir%')] private string $uploadDir,
     )
     {
     }
