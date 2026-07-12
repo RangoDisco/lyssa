@@ -3,10 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\CaretakingAccess;
+use App\Entity\Medication;
 use App\Entity\User;
 use App\Entity\Variant;
 use App\Enum\CaretakerAccessLevel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -38,6 +40,14 @@ class VariantRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getOneOrNullResult() === null;
+    }
+
+    public function getByMedicationQuery(Medication $medication): QueryBuilder
+    {
+        return $this->createQueryBuilder('v')
+            ->select('v')
+            ->where('v.medication = :medication')
+            ->setParameter('medication', $medication);
     }
 
     //    /**
