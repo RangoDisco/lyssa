@@ -2,36 +2,36 @@
 
 namespace App\Security\Voter;
 
+use App\Entity\Medicine;
+use App\Entity\Substance;
 use App\Entity\User;
-use App\Entity\Variant;
 use App\Enum\CaretakerAccessLevel;
-use App\Enum\MedicationSource;
+use App\Enum\Source;
 use App\Enum\UserRole;
-use App\Repository\VariantRepository;
+use App\Repository\CaretakingAccessRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Exception\LogicException;
 
-final class VariantVoter extends Voter
+final class SubstanceVoter extends Voter
 {
-    public const string VIEW = 'VARIANT_VIEW';
-    public const string EDIT = 'VARIANT_EDIT';
-    public const string DELETE = 'VARIANT_DELETE';
+    public const string EDIT = 'SUBSTANCE_EDIT';
+    public const string VIEW = 'SUBSTANCE_VIEW';
+    public const string DELETE = 'SUBSTANCE_DELETE';
 
     public function __construct(
-        private readonly VariantRepository              $variant,
+        private readonly CaretakingAccessRepository     $ca,
         private readonly AccessDecisionManagerInterface $adm
     )
     {
     }
 
-
     protected function supports(string $attribute, mixed $subject): bool
     {
         return in_array($attribute, [self::EDIT, self::VIEW, self::DELETE])
-            && $subject instanceof Variant;
+            && $subject instanceof Substance;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
@@ -53,56 +53,54 @@ final class VariantVoter extends Voter
             self::VIEW => $this->canView($subject, $user, $vote),
             self::EDIT => $this->canEdit($subject, $user, $vote),
             self::DELETE => $this->canDelete($subject, $user, $vote),
-            default => throw new LogicException("Invalid atttribute.")
+            default => throw new LogicException("Invalid attribute")
         };
     }
 
-    private function canView(Variant $variant, User $user, Vote $vote): bool
+    private function canView(Substance $substance, User $user, Vote $vote): bool
     {
-        if ($variant->getMedication()->getSource() === MedicationSource::Official) {
+        if ($substance->getSource() === Source::Official) {
             return true;
         }
 
-        // TODO: see if in some case patient should see the medication created by their caretakers
-        if ($this->variant->hasAccess($variant, $user)) {
+        // TODO: see if in some case patient should see the substance created by their caretakers
+        if ($substance->getOwner() === $user || $this->ca->isCaretakerOf($user, $substance->getOwner())) {
             return true;
         }
 
-        $vote->addReason("Only official medication can be publicly viewed.");
+        $vote->addReason("Only official medicine can be publicly viewed.");
 
         return false;
     }
 
-    private function canEdit(Variant $variant, User $user, Vote $vote): bool
+    private function canEdit(Substance $substance, User $user, Vote $vote): bool
     {
-        if ($variant->getMedication()->getSource() === MedicationSource::Official) {
-            $vote->addReason("Only community medication can be edited.");
-
+        if ($substance->getSource() === Source::Official) {
+            $vote->addReason("Only community substance can be edited.");
             return false;
         }
 
-        if ($this->variant->hasAccess($variant, $user, CaretakerAccessLevel::Edit)) {
+        if ($substance->getOwner() === $user || $this->ca->isCaretakerOf($user, $substance->getOwner(), CaretakerAccessLevel::Edit)) {
             return true;
         }
 
-        $vote->addReason("Only patient and its caretakers (view edit rights) can edit variants related to them.");
+        $vote->addReason("Only owners and caretakers can edit a substance.");
 
         return false;
     }
 
-    private function canDelete(Variant $variant, User $user, Vote $vote): bool
+    private function canDelete(Substance $substance, User $user, Vote $vote): bool
     {
-        if ($variant->getMedication()->getSource() === MedicationSource::Official) {
-            $vote->addReason("Only community medication can be deleted.");
+        if ($substance->getSource() === Source::Official) {
+            $vote->addReason("Only community substance can be deleted.");
             return false;
         }
 
-        if ($this->variant->hasAccess($variant, $user, CaretakerAccessLevel::Edit)) {
+        if ($substance->getOwner() === $user || $this->ca->isCaretakerOf($user, $substance->getOwner(), CaretakerAccessLevel::Edit)) {
             return true;
         }
 
-        $vote->addReason("Only patient and its caretakers (with delete rights) can delete variants related to them.");
-
+        $vote->addReason("Only owners and caretakers can delete a substance.");
         return false;
     }
 }

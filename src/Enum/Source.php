@@ -2,7 +2,7 @@
 
 namespace App\Enum;
 
-enum MedicationSource: string
+enum Source: string
 {
 
     case Official = 'OFFICIAL';

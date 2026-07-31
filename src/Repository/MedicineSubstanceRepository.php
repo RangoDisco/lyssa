@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\MedicationType;
+use App\Entity\MedicineSubstance;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<MedicationType>
+ * @extends ServiceEntityRepository<MedicineSubstance>
  */
-class MedicationTypeRepository extends ServiceEntityRepository
+class MedicineSubstanceRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, MedicationType::class);
+        parent::__construct($registry, MedicineSubstance::class);
     }
 
     //    /**
-    //     * @return MedicationType[] Returns an array of MedicationType objects
+    //     * @return MedicineSubstance[] Returns an array of MedicineSubstance objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +31,7 @@ class MedicationTypeRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?MedicationType
+    //    public function findOneBySomeField($value): ?MedicineSubstance
     //    {
     //        return $this->createQueryBuilder('m')
     //            ->andWhere('m.exampleField = :val')

@@ -6,7 +6,7 @@ use App\Repository\LabRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LabRepository::class)]
-class Lab
+class Lab extends GenericEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

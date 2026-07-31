@@ -6,7 +6,7 @@ use App\Entity\Dispense;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]
-final class MedicationDispenseListItem
+final class SubstanceDispenseListItem
 {
 
     public Dispense $dispense;
