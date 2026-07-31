@@ -2,7 +2,7 @@
 
 namespace App\Enum;
 
-enum MedicationFormat: string
+enum MedicineFormat: string
 {
 
     case Pill = 'PILL';

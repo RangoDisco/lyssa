@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
+use     App\Enum\Source;
 use App\Repository\SubstanceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SubstanceRepository::class)]
-class Substance
+#[ORM\Index(name: 'idx_substance_code', columns: ['code'])]
+class Substance extends GenericEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -26,6 +28,12 @@ class Substance
      */
     #[ORM\ManyToMany(targetEntity: SubstanceCategory::class, inversedBy: 'substances')]
     private Collection $categories;
+
+    #[ORM\ManyToOne]
+    private ?User $owner = null;
+
+    #[ORM\Column(enumType: Source::class)]
+    private ?Source $source = Source::Community;
 
     public function __construct()
     {
@@ -81,6 +89,30 @@ class Substance
     public function removeCategory(SubstanceCategory $category): static
     {
         $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): static
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function getSource(): ?Source
+    {
+        return $this->source;
+    }
+
+    public function setSource(Source $source): static
+    {
+        $this->source = $source;
 
         return $this;
     }

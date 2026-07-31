@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\MedicationTypeRepository;
+use App\Repository\SubstanceCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: MedicationTypeRepository::class)]
+#[ORM\Entity(repositoryClass: SubstanceCategoryRepository::class)]
 class SubstanceCategory extends GenericEntity
 {
     #[ORM\Id]

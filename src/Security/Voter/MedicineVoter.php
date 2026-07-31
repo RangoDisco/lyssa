@@ -2,10 +2,10 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\Medication;
+use App\Entity\Medicine;
 use App\Entity\User;
 use App\Enum\CaretakerAccessLevel;
-use App\Enum\MedicationSource;
+use App\Enum\Source;
 use App\Enum\UserRole;
 use App\Repository\CaretakingAccessRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -14,11 +14,11 @@ use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Exception\LogicException;
 
-final class MedicationVoter extends Voter
+final class MedicineVoter extends Voter
 {
-    public const string EDIT = 'MEDICATION_EDIT';
-    public const string VIEW = 'MEDICATION_VIEW';
-    public const string DELETE = 'MEDICATION_DELETE';
+    public const string EDIT = 'MEDICINE_EDIT';
+    public const string VIEW = 'MEDICINE_VIEW';
+    public const string DELETE = 'MEDICINE_DELETE';
 
     public function __construct(
         private readonly CaretakingAccessRepository     $ca,
@@ -30,7 +30,7 @@ final class MedicationVoter extends Voter
     protected function supports(string $attribute, mixed $subject): bool
     {
         return in_array($attribute, [self::EDIT, self::VIEW, self::DELETE])
-            && $subject instanceof Medication;
+            && $subject instanceof Medicine;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
@@ -56,46 +56,46 @@ final class MedicationVoter extends Voter
         };
     }
 
-    private function canView(Medication $medication, User $user, Vote $vote): bool
+    private function canView(Medicine $medicine, User $user, Vote $vote): bool
     {
-        if ($medication->getSource() === MedicationSource::Official) {
+        if ($medicine->getSource() === Source::Official) {
             return true;
         }
 
-        // TODO: see if in some case patient should see the medication created by their caretakers
-        if ($medication->getOwner() === $user || $this->ca->isCaretakerOf($user, $medication->getOwner())) {
+        // TODO: see if in some case patient should see the medicine created by their caretakers
+        if ($medicine->getOwner() === $user || $this->ca->isCaretakerOf($user, $medicine->getOwner())) {
             return true;
         }
 
-        $vote->addReason("Only official medication can be publicly viewed.");
+        $vote->addReason("Only official medicine can be publicly viewed.");
 
         return false;
     }
 
-    private function canEdit(Medication $medication, User $user, Vote $vote): bool
+    private function canEdit(Medicine $medicine, User $user, Vote $vote): bool
     {
-        if ($medication->getSource() === MedicationSource::Official) {
-            $vote->addReason("Only community medication can be edited.");
+        if ($medicine->getSource() === Source::Official) {
+            $vote->addReason("Only community medicine can be edited.");
             return false;
         }
 
-        if ($medication->getOwner() === $user || $this->ca->isCaretakerOf($user, $medication->getOwner(), CaretakerAccessLevel::Edit)) {
+        if ($medicine->getOwner() === $user || $this->ca->isCaretakerOf($user, $medicine->getOwner(), CaretakerAccessLevel::Edit)) {
             return true;
         }
 
-        $vote->addReason("Only owners and caretakers can edit a medication.");
+        $vote->addReason("Only owners and caretakers can edit a medicine.");
 
         return false;
     }
 
-    private function canDelete(Medication $medication, User $user, Vote $vote): bool
+    private function canDelete(Medicine $medicine, User $user, Vote $vote): bool
     {
-        if ($medication->getSource() === MedicationSource::Official) {
-            $vote->addReason("Only community medication can be deleted.");
+        if ($medicine->getSource() === Source::Official) {
+            $vote->addReason("Only community medicine can be deleted.");
             return false;
         }
 
-        if ($medication->getOwner() === $user || $this->ca->isCaretakerOf($user, $medication->getOwner(), CaretakerAccessLevel::Edit)) {
+        if ($medicine->getOwner() === $user || $this->ca->isCaretakerOf($user, $medicine->getOwner(), CaretakerAccessLevel::Edit)) {
             return true;
         }
 

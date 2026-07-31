@@ -56,10 +56,31 @@ class User extends GenericEntity implements UserInterface, PasswordAuthenticated
     #[ORM\Column]
     private bool $isVerified = false;
 
+    #[ORM\OneToMany(targetEntity: CaretakingAccess::class, mappedBy: 'caretaker', orphanRemoval: true)]
+    private Collection $careTakerAccesses;
+
+    #[ORM\OneToMany(targetEntity: CaretakingAccess::class, mappedBy: 'patient', orphanRemoval: true)]
+    private Collection $patientAccesses;
+
     public function __construct()
     {
         $this->prescriptions = new ArrayCollection();
         $this->doctors = new ArrayCollection();
+        $this->careTakerAccesses = new ArrayCollection();
+        $this->patientAccesses = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection<User>
+     */
+    public function getPatients(): Collection
+    {
+        return $this->getCareTakerAccesses()->map(static fn(CaretakingAccess $ca) => $ca->getPatient());
+    }
+
+    public function getCareTakers(): Collection
+    {
+        return $this->getPatientAccesses()->map(static fn(CaretakingAccess $ca) => $ca->getCaretaker());
     }
 
     public function getId(): ?int
@@ -120,7 +141,7 @@ class User extends GenericEntity implements UserInterface, PasswordAuthenticated
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     public function getPicture(): ?Media
@@ -217,5 +238,25 @@ class User extends GenericEntity implements UserInterface, PasswordAuthenticated
         $this->isVerified = $isVerified;
 
         return $this;
+    }
+
+    public function getCareTakerAccesses(): Collection
+    {
+        return $this->careTakerAccesses;
+    }
+
+    public function setCareTakerAccesses(Collection $careTakerAccesses): void
+    {
+        $this->careTakerAccesses = $careTakerAccesses;
+    }
+
+    public function getPatientAccesses(): Collection
+    {
+        return $this->patientAccesses;
+    }
+
+    public function setPatientAccesses(Collection $patientAccesses): void
+    {
+        $this->patientAccesses = $patientAccesses;
     }
 }

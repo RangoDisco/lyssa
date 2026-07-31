@@ -23,7 +23,7 @@ class CaretakingAccessRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('ca')
             ->select('ca')
             ->andWhere('ca.caretaker = :caretaker')
-            ->andWhere('ca.patient = :aptient')
+            ->andWhere('ca.patient = :patient')
             ->setParameter('caretaker', $user)
             ->setParameter('patient', $patient)
             ->setMaxResults(1);

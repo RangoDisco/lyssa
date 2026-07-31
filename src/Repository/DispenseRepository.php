@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\CaretakingAccess;
 use App\Entity\Dispense;
-use App\Entity\Medication;
+use App\Entity\Substance;
 use App\Entity\User;
 use App\Enum\CaretakerAccessLevel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -43,13 +43,15 @@ class DispenseRepository extends ServiceEntityRepository
         return $qb->getQuery()->getOneOrNullResult() === null;
     }
 
-    public function getByMedicationQuery(Medication $medication): QueryBuilder
+    public function getBySubstance(Substance $substance): QueryBuilder
     {
         return $this->createQueryBuilder('d')
             ->select('d')
-            ->innerJoin('d.variant', 'v')
-            ->where('v.medication = :medication')
-            ->setParameter('medication', $medication);
+            ->innerJoin('d.medicine', 'm')
+            ->innerJoin('m.medicineSubstance', 'ms')
+            ->innerJoin('ms.substance', 's')
+            ->where('s = :substance')
+            ->setParameter('substance', $substance);
     }
 
 //    /**

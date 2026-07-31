@@ -15,7 +15,7 @@ class Dispense extends GenericEntity
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Variant $variant = null;
+    private ?Medicine $medicine = null;
 
     #[ORM\ManyToOne(inversedBy: 'dispenses')]
     #[ORM\JoinColumn(nullable: false)]
@@ -32,14 +32,14 @@ class Dispense extends GenericEntity
         return $this->id;
     }
 
-    public function getVariant(): ?Variant
+    public function getMedicine(): ?Medicine
     {
-        return $this->variant;
+        return $this->medicine;
     }
 
-    public function setVariant(?Variant $variant): static
+    public function setMedicine(?Medicine $medicine): static
     {
-        $this->variant = $variant;
+        $this->medicine = $medicine;
 
         return $this;
     }

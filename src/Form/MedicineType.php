@@ -2,31 +2,30 @@
 
 namespace App\Form;
 
-use App\Entity\Medication;
-use App\Entity\MedicationType;
+use App\Entity\Medicine;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MedicationTypeType extends AbstractType
+class MedicineType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('color')
-            ->add('name')
-            ->add('medication', EntityType::class, [
+            ->add('dosage')
+            ->add('format')
+            // TODO: handle with join
+            ->add('substance_cate', EntityType::class, [
                 'class' => Medication::class,
-                'choice_label' => 'id',
-            ])
-        ;
+                'choice_label' => 'name',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => MedicationType::class,
+            'data_class' => Medicine::class,
         ]);
     }
 }
