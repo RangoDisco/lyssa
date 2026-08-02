@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Media;
-use http\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
