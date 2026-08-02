@@ -28,7 +28,7 @@ class Medicine extends GenericEntity
     private ?int $dosage = null;
 
     #[ORM\Column(enumType: Source::class)]
-    private Source $source;
+    private Source $source = Source::Community;
 
     #[ORM\Column(enumType: MedicineFormat::class)]
     private ?MedicineFormat $format = null;
@@ -41,7 +41,7 @@ class Medicine extends GenericEntity
 
     #[ORM\Column]
     #[Assert\NotNull]
-    private bool $isGeneric;
+    private bool $isGeneric = false;
 
     #[ORM\Column(length: 7, nullable: true)]
     private ?string $cis = null;
@@ -60,8 +60,6 @@ class Medicine extends GenericEntity
 
     public function __construct()
     {
-        $this->isGeneric = false;
-        $this->source = Source::Community;
         $this->medicineSubstances = new ArrayCollection();
         $this->labs = new ArrayCollection();
     }
