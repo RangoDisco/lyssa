@@ -48,7 +48,7 @@ class DispenseRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('d')
             ->select('d')
             ->innerJoin('d.medicine', 'm')
-            ->innerJoin('m.medicineSubstance', 'ms')
+            ->innerJoin('m.medicineSubstances', 'ms')
             ->innerJoin('ms.substance', 's')
             ->where('s = :substance')
             ->setParameter('substance', $substance);
