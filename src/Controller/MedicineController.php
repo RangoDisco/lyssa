@@ -67,7 +67,7 @@ final class MedicineController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_medicine_show', methods: ['GET'])]
-    #[IsGranted("VARIANT_VIEW", subject: 'medicine')]
+    #[IsGranted("MEDICINE_VIEW", subject: 'medicine')]
     public function show(Medicine $medicine): Response
     {
         return $this->render('medicine/show.html.twig', [
@@ -76,7 +76,7 @@ final class MedicineController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_medicine_edit', methods: ['GET', 'POST'])]
-    #[IsGranted("VARiANT_EDIT", subject: 'medicine')]
+    #[IsGranted("MEDICINE_EDIT", subject: 'medicine')]
     public function edit(Request $request, Medicine $medicine, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(MedicineType::class, $medicine);
@@ -95,7 +95,7 @@ final class MedicineController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_medicine_delete', methods: ['POST'])]
-    #[IsGranted("VARiANT_DELETE", subject: 'medicine')]
+    #[IsGranted("MEDICINE_DELETE", subject: 'medicine')]
     public function delete(Request $request, Medicine $medicine, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $medicine->getId(), $request->getPayload()->getString('_token'))) {
