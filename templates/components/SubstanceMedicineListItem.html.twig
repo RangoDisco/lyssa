@@ -1,8 +1,10 @@
 <twig:Card>
     <twig:Card:Content class="flex justify-between items-center">
-        <div class="flex gap-4 items-center">
-            <span class="font-bold">{{ variant.dosage }}mg</span>
-            <span>{{ variant.format.value|capitalize }}</span>
+        <div class="flex flex-col gap-2">
+            <div class="flex gap-4 items-center">
+                <span class="font-bold">{{ medicineSubstance.medicine.name }}</span>
+            </div>
+            <span>{{ medicineSubstance.amount }} {{ medicineSubstance.unit.value }} {{ medicineSubstance.medicine.format.value|capitalize }}</span>
         </div>
         <twig:Button size="icon" variant="ghost" aria-label="More">
             <twig:ux:icon name="lucide:ellipsis-vertical"/>

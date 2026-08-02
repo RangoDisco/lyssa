@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\MedicineSubstance;
+use App\Entity\Substance;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -14,6 +16,13 @@ class MedicineSubstanceRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, MedicineSubstance::class);
+    }
+
+    public function getBySubstanceQuery(Substance $substance): QueryBuilder
+    {
+        return $this->createQueryBuilder('ms')
+            ->where('ms.substance = :substance')
+            ->setParameter('substance', $substance);
     }
 
     //    /**

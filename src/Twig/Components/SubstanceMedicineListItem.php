@@ -2,12 +2,12 @@
 
 namespace App\Twig\Components;
 
-use App\Entity\Medicine;
+use App\Entity\MedicineSubstance;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]
 final class SubstanceMedicineListItem
 {
 
-    public Medicine $medicine;
+    public MedicineSubstance $medicineSubstance;
 }
