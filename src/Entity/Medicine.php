@@ -39,7 +39,7 @@ class Medicine extends GenericEntity
     #[Assert\NotNull]
     private bool $isGeneric = false;
 
-    #[ORM\Column(length: 7, nullable: true)]
+    #[ORM\Column(length: 8, nullable: true)]
     private ?string $cis = null;
 
     /**
