@@ -23,10 +23,6 @@ class Medicine extends GenericEntity
     #[Assert\NotBlank]
     private ?string $name = null;
 
-    #[ORM\Column]
-    #[Assert\NotNull]
-    private ?int $dosage = null;
-
     #[ORM\Column(enumType: Source::class)]
     private Source $source = Source::Community;
 
@@ -52,16 +48,12 @@ class Medicine extends GenericEntity
     #[ORM\OneToMany(targetEntity: MedicineSubstance::class, mappedBy: 'medicine', orphanRemoval: true)]
     private Collection $medicineSubstances;
 
-    /**
-     * @var Collection<int, Lab>
-     */
-    #[ORM\ManyToMany(targetEntity: Lab::class)]
-    private Collection $labs;
+    #[ORM\ManyToOne(targetEntity: Lab::class)]
+    private ?Lab $lab = null;
 
     public function __construct()
     {
         $this->medicineSubstances = new ArrayCollection();
-        $this->labs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -141,24 +133,16 @@ class Medicine extends GenericEntity
         return $this;
     }
 
-    public function getDosage(): ?int
-    {
-        return $this->dosage;
-    }
-
-    public function setDosage(?int $dosage): void
-    {
-        $this->dosage = $dosage;
-    }
-
     public function getFormat(): ?MedicineFormat
     {
         return $this->format;
     }
 
-    public function setFormat(?MedicineFormat $format): void
+    public function setFormat(?MedicineFormat $format): static
     {
         $this->format = $format;
+
+        return $this;
     }
 
     /**
@@ -194,23 +178,14 @@ class Medicine extends GenericEntity
     /**
      * @return Collection<int, Lab>
      */
-    public function getLabs(): Collection
+    public function getLab(): ?Lab
     {
-        return $this->labs;
+        return $this->lab;
     }
 
-    public function addLab(Lab $lab): static
+    public function setLab(?Lab $lab): static
     {
-        if (!$this->labs->contains($lab)) {
-            $this->labs->add($lab);
-        }
-
-        return $this;
-    }
-
-    public function removeLab(Lab $lab): static
-    {
-        $this->labs->removeElement($lab);
+        $this->lab = $lab;
 
         return $this;
     }
