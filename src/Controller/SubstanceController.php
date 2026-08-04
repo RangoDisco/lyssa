@@ -52,7 +52,7 @@ final class SubstanceController extends AbstractController
     {
         return $this->render('substance/show.html.twig', [
             'substance' => $substance,
-            'format' => $substance->getFormat()[0] ?? null,
+            'category' => $substance->getCategories()[0] ?? null,
         ]);
     }
 
