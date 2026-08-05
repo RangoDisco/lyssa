@@ -50,7 +50,7 @@ class ImportMedicineCommand extends Command
 
         if (!in_array($content, ['medicine', 'generic'])) {
             $io->error("Content is not valid");
-            return Command::FAILURE;
+            return Command::INVALID;
         }
 
         // Ask for user confirmation before real runs
@@ -85,6 +85,7 @@ class ImportMedicineCommand extends Command
                 $this->importer->importMedicine($bdpm, $persist);
             } catch (Throwable $e) {
                 $io->error(sprintf("An error occurred when importing: %s, err: %s", $bdpm->name, $e->getMessage()));
+                return Command::FAILURE;
             }
             $io->progressAdvance();
         }
