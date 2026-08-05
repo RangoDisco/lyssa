@@ -2,15 +2,14 @@
 
 namespace App\Command;
 
-use App\DTO\Import\CISBDPMDTO;
-use App\DTO\Import\CISGENERDTO;
+use App\DTO\Import\CisBdpmDTO;
+use App\DTO\Import\CisGenerDTO;
+use App\Enum\MedicineImportContent;
 use App\Service\ImportService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -28,7 +27,6 @@ class ImportMedicineCommand extends Command
         private readonly SerializerInterface                    $serializer,
         private readonly ImportService                          $importer,
         #[Autowire('%app.import_dir%')] private readonly string $importDir,
-
     )
     {
         parent::__construct();
@@ -38,20 +36,15 @@ class ImportMedicineCommand extends Command
      * @throws ExceptionInterface
      */
     public function __invoke(
-        InputInterface  $input,
-        OutputInterface $output,
-        #[Option(description: 'Whether we import medicine or generics', suggestedValues: ['medicine', 'generics'])]
-        string          $content = 'medicine',
+        InputInterface        $input,
+        OutputInterface       $output,
+        #[Option(description: 'Whether we import medicine or generics', suggestedValues: ['medicine', 'generic'])]
+        MedicineImportContent $content = MedicineImportContent::Medicine,
         #[Option(description: 'Whether the data is ultimately persisted or not.')]
-        bool            $persist = false,
+        bool                  $persist = false,
     ): int
     {
         $io = new SymfonyStyle($input, $output);
-
-        if (!in_array($content, ['medicine', 'generic'])) {
-            $io->error("Content is not valid");
-            return Command::INVALID;
-        }
 
         // Ask for user confirmation before real runs
         if ($persist === false) {
@@ -66,10 +59,10 @@ class ImportMedicineCommand extends Command
 
         if ($content === 'medicine') {
             $filePath = sprintf('%s/%s', $this->importDir, 'CIS_BDPM.csv');
-            $type = CISBDPMDTO::class;
+            $type = CisBdpmDTO::class;
         } else {
             $filePath = sprintf('%s/%s', $this->importDir, 'CIS_GENER.csv');
-            $type = CISGENERDTO::class;
+            $type = CisGenerDTO::class;
         }
 
         $csv = file_get_contents($filePath);

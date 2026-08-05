@@ -2,7 +2,7 @@
 
 namespace App\DTO\Import;
 
-class CISBDPMDTO
+class CisBdpmDTO
 {
 
     public int $cis;

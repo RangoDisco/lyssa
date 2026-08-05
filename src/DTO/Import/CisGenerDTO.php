@@ -2,7 +2,7 @@
 
 namespace App\DTO\Import;
 
-class CISGENERDTO
+class CisGenerDTO
 {
 
     public int $id;
