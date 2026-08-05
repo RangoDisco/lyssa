@@ -5,8 +5,8 @@ namespace App\DTO\Import;
 class CISBDPMDTO
 {
 
-    public int $CIS;
-    public string $Name;
+    public int $cis;
+    public string $name;
     public string $pharma_type;
     public string $giving_type;
     public string $admin_status;

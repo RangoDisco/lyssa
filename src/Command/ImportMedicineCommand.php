@@ -3,8 +3,10 @@
 namespace App\Command;
 
 use App\DTO\Import\CISBDPMDTO;
+use App\DTO\Import\CISGENERDTO;
 use App\Service\ImportService;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,7 +20,7 @@ use Throwable;
 
 #[AsCommand(
     name: 'app:import:medicine',
-    description: 'Import/Upsert Medicine and their lab from a file from the French medicine database.',
+    description: 'Import Medicine/Generics from the French medicine database.',
 )]
 class ImportMedicineCommand extends Command
 {
@@ -32,23 +34,27 @@ class ImportMedicineCommand extends Command
         parent::__construct();
     }
 
-    protected function configure(): void
-    {
-        $this
-            ->addOption('persist', null, InputOption::VALUE_NONE, 'Whether the data is ultimately persisted or not.')
-            ->addArgument('file-path', InputArgument::OPTIONAL, 'Path to the import file', default: sprintf('%s/%s', $this->importDir, 'CIS_bdpm.csv'));
-    }
-
     /**
      * @throws ExceptionInterface
      */
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    public function __invoke(
+        InputInterface  $input,
+        OutputInterface $output,
+        #[Option(description: 'Whether we import medicine or generics', suggestedValues: ['medicine', 'generics'])]
+        string          $content = 'medicine',
+        #[Option(description: 'Whether the data is ultimately persisted or not.')]
+        bool            $persist = false,
+    ): int
     {
         $io = new SymfonyStyle($input, $output);
-        $shouldPersist = $input->getOption('persist');
 
+        if (!in_array($content, ['medicine', 'generic'])) {
+            $io->error("Content is not valid");
+            return Command::FAILURE;
+        }
 
-        if ($shouldPersist === false) {
+        // Ask for user confirmation before real runs
+        if ($persist === false) {
             $io->note('This command is running as a dry-run.');
         } else {
             $shouldContinue = $io->confirm('This command will persist data, continue ?', false);
@@ -58,28 +64,34 @@ class ImportMedicineCommand extends Command
             }
         }
 
-        $filePath = $input->getArgument('file-path');
+        if ($content === 'medicine') {
+            $filePath = sprintf('%s/%s', $this->importDir, 'CIS_BDPM.csv');
+            $type = CISBDPMDTO::class;
+        } else {
+            $filePath = sprintf('%s/%s', $this->importDir, 'CIS_GENER.csv');
+            $type = CISGENERDTO::class;
+        }
 
         $csv = file_get_contents($filePath);
-        $io->info('Imported csv');
+        $io->info("Imported $content csv");
 
-        $data = $this->serializer->deserialize($csv, CISBDPMDTO::class . '[]', 'csv');
-        $io->info(sprintf('Deserialized csv to %s', CISBDPMDTO::class));
+        $data = $this->serializer->deserialize($csv, $type . '[]', 'csv');
+        $io->info(sprintf('Deserialized csv to %s', $type));
 
         $io->progressStart(count($data));
 
         foreach ($data as $bdpm) {
             try {
-                $this->importer->getMedicineFromBdpm($bdpm, $shouldPersist);
+                $this->importer->importMedicine($bdpm, $persist);
             } catch (Throwable $e) {
-                $io->error(sprintf("An error occurred when importing: %s, err: %s", $bdpm->Name, $e->getMessage()));
+                $io->error(sprintf("An error occurred when importing: %s, err: %s", $bdpm->name, $e->getMessage()));
             }
             $io->progressAdvance();
         }
 
         $io->progressFinish();
 
-        $io->success(sprintf('%s %d %s', 'Successfully imported', count($data), 'medicines.'));
+        $io->success(sprintf('%s %d %ss.', 'Successfully imported', count($data), $content));
         return Command::SUCCESS;
     }
 }

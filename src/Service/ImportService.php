@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\DTO\Import\CISBDPMDTO;
+use App\DTO\Import\CISGENERDTO;
 use App\Entity\Lab;
 use App\Entity\Medicine;
 use App\Enum\MedicineFormat;
@@ -24,27 +25,36 @@ readonly class ImportService
     {
     }
 
-    public function getMedicineFromBdpm(CISBDPMDTO $bdpm, bool $shouldPersist): bool
+    public function importMedicine(CISBDPMDTO|CISGENERDTO $dto, bool $shouldPersist): bool
     {
         $existing = $this->medicineRepository->findOneBy([
-            'cis' => $bdpm->CIS
+            'cis' => $dto->cis
         ]);
 
         if ($existing) {
             return true;
         }
 
-        $medicine = new Medicine();
-        $name = $this->normalizeMedicineName($bdpm->Name);
-        $lab = $this->getOrCreateLab($bdpm->maker, $shouldPersist);
-        $format = $this->normalizeFormat($bdpm->pharma_type);
+        // Both imports have slightly different columns, we are forced to use different methods.
+        if ($dto instanceof CISBDPMDTO) {
+            $name = $this->normalizeMedicineName($dto->name);
+            $lab = $this->getOrCreateLab($dto->maker, $shouldPersist);
+            $format = $this->normalizeFormat($dto->pharma_type);
+            $isGeneric = false;
+        } else {
+            $name = $this->normalizeMedicineName($dto->name);
+            $lab = null;
+            $format = $this->getFormatFromName($dto->name);
+            $isGeneric = true;
+        }
 
-        $medicine->setCis($bdpm->CIS)
+        $medicine = new Medicine()
+            ->setCis($dto->cis)
+            ->setName($name)
             ->setLab($lab)
             ->setFormat($format)
-            ->setIsGeneric(false) // Handled by another import
-            ->setSource(Source::Official)
-            ->setName($name);
+            ->setIsGeneric($isGeneric)
+            ->setSource(Source::Official);
 
         if ($shouldPersist) {
             $this->em->persist($medicine);
@@ -82,6 +92,14 @@ readonly class ImportService
     private function normalizeMedicineName(string $name): string
     {
         return explode(', ', $name)[0];
+    }
+
+    // Used for generics as they do not include a "type" column.
+    private function getFormatFromName(string $name): MedicineFormat
+    {
+        $format = explode(', ', $name)[1];
+
+        return $this->normalizeFormat($format);
     }
 
     private function getOrCreateLab(string $name, bool $shouldPersist): Lab
