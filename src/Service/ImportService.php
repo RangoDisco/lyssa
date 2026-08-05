@@ -64,8 +64,13 @@ readonly class ImportService
         return true;
     }
 
-    private function normalizeFormat(string $format): MedicineFormat
+    private function normalizeFormat(?string $format): MedicineFormat
     {
+
+        if (!$format) {
+            return MedicineFormat::Unknown;
+        }
+
         $transliterator = Transliterator::createFromRules(':: Any-Latin; :: Latin-ASCII; :: NFD; :: [:Nonspacing Mark:] Remove; :: Lower(); :: NFC;', Transliterator::FORWARD);
         $normalized = $transliterator->transliterate($format);
 
