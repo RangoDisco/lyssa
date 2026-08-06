@@ -40,24 +40,11 @@ class ImportMedicineCommand extends Command
         OutputInterface       $output,
         #[Option(description: 'Whether we import medicine or generics', suggestedValues: ['medicine', 'generic'])]
         MedicineImportContent $content = MedicineImportContent::Medicine,
-        #[Option(description: 'Whether the data is ultimately persisted or not.')]
-        bool                  $persist = false,
     ): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        // Ask for user confirmation before real runs
-        if ($persist === false) {
-            $io->note('This command is running as a dry-run.');
-        } else {
-            $shouldContinue = $io->confirm('This command will persist data, continue ?', false);
-            if (!$shouldContinue) {
-                $io->error('Command aborted');
-                return Command::FAILURE;
-            }
-        }
-
-        if ($content === 'medicine') {
+        if ($content === MedicineImportContent::Medicine) {
             $filePath = sprintf('%s/%s', $this->importDir, 'CIS_BDPM.csv');
             $type = CisBdpmDTO::class;
         } else {
@@ -66,7 +53,7 @@ class ImportMedicineCommand extends Command
         }
 
         $csv = file_get_contents($filePath);
-        $io->info("Imported $content csv");
+        $io->info("Imported $content->value csv");
 
         $data = $this->serializer->deserialize($csv, $type . '[]', 'csv');
         $io->info(sprintf('Deserialized csv to %s', $type));
@@ -75,7 +62,7 @@ class ImportMedicineCommand extends Command
 
         foreach ($data as $bdpm) {
             try {
-                $this->importer->importMedicine($bdpm, $persist);
+                $this->importer->importMedicine($bdpm);
             } catch (Throwable $e) {
                 $io->error(sprintf("An error occurred when importing: %s, err: %s", $bdpm->name, $e->getMessage()));
                 return Command::FAILURE;
@@ -85,7 +72,7 @@ class ImportMedicineCommand extends Command
 
         $io->progressFinish();
 
-        $io->success(sprintf('%s %d %ss.', 'Successfully imported', count($data), $content));
+        $io->success(sprintf('%s %d %ss.', 'Successfully imported', count($data), $content->value));
         return Command::SUCCESS;
     }
 }
