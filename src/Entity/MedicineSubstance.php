@@ -22,10 +22,10 @@ class MedicineSubstance extends GenericEntity
     #[ORM\JoinColumn(nullable: false)]
     private ?Substance $substance = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $amount = null;
 
-    #[ORM\Column(enumType: DosageUnitEnum::class)]
+    #[ORM\Column(nullable: true, enumType: DosageUnitEnum::class)]
     private ?DosageUnitEnum $unit = null;
 
     public function getId(): ?int
@@ -62,7 +62,7 @@ class MedicineSubstance extends GenericEntity
         return $this->amount;
     }
 
-    public function setAmount(float $amount): static
+    public function setAmount(?float $amount = null): static
     {
         $this->amount = $amount;
 
@@ -74,7 +74,7 @@ class MedicineSubstance extends GenericEntity
         return $this->unit;
     }
 
-    public function setUnit(DosageUnitEnum $unit): static
+    public function setUnit(?DosageUnitEnum $unit = null): static
     {
         $this->unit = $unit;
 
