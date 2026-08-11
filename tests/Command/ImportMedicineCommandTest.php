@@ -3,6 +3,7 @@
 namespace App\Tests\Command;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Console\Exception\InvalidOptionException;
 
 class ImportMedicineCommandTest extends KernelTestCase
 {
@@ -28,8 +29,7 @@ class ImportMedicineCommandTest extends KernelTestCase
 
     public function testImportWrongContent(): void
     {
-        $result = static::runCommand('app:import:medicine', ['--content' => 'wrong']);
-
-        $this->assertCommandFailed($result);
+        $this->expectException(InvalidOptionException::class);
+        static::runCommand('app:import:medicine', ['--content' => 'wrong']);
     }
 }
