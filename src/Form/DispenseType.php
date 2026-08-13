@@ -22,7 +22,7 @@ class DispenseType extends AbstractType
             ->add('medicine', EntityType::class, [
                 'class' => Medicine::class,
                 'choice_label' => function (Medicine $medicine) {
-                    return sprintf("%s - %s", $medicine->getName(), $medicine->getLab()->getName());
+                    return sprintf("%s - %s", $medicine->getName(), $medicine->getLab()?->getName());
                 },
             ])
             ->add('prescription', EntityType::class, [
