@@ -25,6 +25,17 @@ class MedicineSubstanceRepository extends ServiceEntityRepository
             ->setParameter('substance', $substance);
     }
 
+    public function findOneBySubstanceAndCis(Substance $substance, int $cis): ?MedicineSubstance
+    {
+        return $this->createQueryBuilder('ms')
+            ->innerJoin('ms.medicine', 'm')
+            ->where('ms.substance = :substance')
+            ->andWhere('m.cis = :cis')
+            ->setParameter('substance', $substance)
+            ->setParameter('cis', $cis)
+            ->getQuery()->getOneOrNullResult();
+    }
+
     //    /**
     //     * @return MedicineSubstance[] Returns an array of MedicineSubstance objects
     //     */
