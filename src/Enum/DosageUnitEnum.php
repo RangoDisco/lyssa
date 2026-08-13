@@ -8,9 +8,11 @@ enum DosageUnitEnum: string
     case Gram = 'g';
     case MicroGram = 'μg';
     case InternationalUnit = 'ui';
+    case UD = 'ud';
     case UCEIP = 'u.ceip';
     case Milliliter = 'ml';
     case DH = 'dh';
     case Unit = 'unites';
     case Micrometer = 'mu';
+    case Mbq = 'mbq';
 }
