@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+    <form method="post">
+        {% if error %}
+            <twig:Alert variant="destructive" class="max-w-md">
+                <twig:ux:icon name="lucide:circle-alert"/>
+                <twig:Alert:Title>Login failed</twig:Alert:Title>
+                <twig:Alert:Description>
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </twig:Alert:Description>
+            </twig:Alert>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="mb-3">
+                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
+            </div>
+        {% endif %}
+        <div class="flex flex-col max-w-md mx-auto">
+            <h1 class="h3 mb-3 font-weight-normal">Lyssa</h1>
+            <twig:Field:Set>
+                <twig:Field:Group>
+                    <twig:Field>
+                        <twig:Field:label for="username">Username</twig:Field:label>
+                        <twig:Input id="username" name="_username" type="text" placeholder="" autocomplete="email"/>
+                    </twig:Field>
+                    <twig:Field>
+                        <twig:Field:label for="password">Password</twig:Field:label>
+                        <twig:Input id="password" name="_password" type="text" placeholder=""
+                                    autocomplete="current-password"/>
+                    </twig:Field>
+                    <twig:Field orientation="horizontal">
+                        <twig:Checkbox id="_remember_me" name="_remember_me" checked/>
+                        <twig:Field:Content>
+                            <twig:Field:Label for="_remember_me">Remember me</twig:Field:Label>
+                        </twig:Field:Content>
+                    </twig:Field>
+                </twig:Field:Group>
+                <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
+                       value="{{ csrf_token('authenticate') }}">
+
+                <twig:Button>Sign in</twig:Button>
+            </twig:Field:Set>
+        </div>
+    </form>
+{% endblock %}

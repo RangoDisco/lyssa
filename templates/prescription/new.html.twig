@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Prescription{% endblock %}
+
+{% block body %}
+    <h1>Create new Prescription</h1>
+
+    <div class="max-w-md mx-auto flex flex-col gap-4">
+        {{ include('prescription/_form.html.twig') }}
+
+        <twig:Button as="a" variant="outline" href="{{ path('app_prescription_index') }}">back to list</twig:Button>
+    </div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Prescription{% endblock %}
+
+{% block body %}
+    <h1>Prescription</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ prescription.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ prescription.name }}</td>
+            </tr>
+            <tr>
+                <th>DeletedAt</th>
+                <td>{{ prescription.deletedAt ? prescription.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ prescription.createdAt ? prescription.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ prescription.updatedAt ? prescription.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_prescription_index') }}">back to list</a>
+
+    <a href="{{ path('app_prescription_edit', {'id': prescription.id}) }}">edit</a>
+
+    {{ include('prescription/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ substance.name }}{% endblock %}
+
+{% block body %}
+    <div class="flex flex-col gap-8 items-center w-full md:max-w-xl md:mx-auto">
+        <div class="flex flex-col items-center">
+            <img
+                class="rounded-lg object-cover h-24 w-24 border"
+                src="{{ asset('uploads/Loulou-6a510b7e420d12.88227757.jpg') }}"
+                onerror="this.src='{{ asset('uploads/Loulou-6a510b7e420d12.88227757.jpg') }}'"
+                alt="{{ substance.name }}"
+            />
+
+            <twig:Typography:H3>{{ substance.name }}</twig:Typography:H3>
+            {% if category != null %}
+                <p
+                    class="text-muted-foreground font-normal text-md">{{ category.name }}</p>
+            {% endif %}
+        </div>
+
+        <twig:SubstanceDispenseList :substance="substance"/>
+        <twig:SubstanceMedicineList :substance="substance"/>
+
+        <a href="{{ path('app_substance_index') }}">back to list</a>
+
+        <a href="{{ path('app_substance_edit', {'id': substance.id}) }}">edit</a>
+
+        {{ include('substance/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

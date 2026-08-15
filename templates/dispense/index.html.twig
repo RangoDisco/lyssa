@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dispense index{% endblock %}
+
+{% block body %}
+    <h1>Dispense index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>ScheduledAt</th>
+                <th>DoneAt</th>
+                <th>DeletedAt</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for dispense in dispenses %}
+            <tr>
+                <td>{{ dispense.id }}</td>
+                <td>{{ dispense.scheduledAt ? dispense.scheduledAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ dispense.doneAt ? dispense.doneAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ dispense.deletedAt ? dispense.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ dispense.createdAt ? dispense.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ dispense.updatedAt ? dispense.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_dispense_show', {'id': dispense.id}) }}">show</a>
+                    <a href="{{ path('app_dispense_edit', {'id': dispense.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_dispense_new') }}">Create new</a>
+{% endblock %}

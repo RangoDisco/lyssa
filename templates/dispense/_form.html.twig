@@ -1,0 +1,6 @@
+{% form_theme form 'form/toolkit_theme.html.twig' %}
+
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <twig:Button >{{ button_label|default('Save') }}</twig:Button>
+{{ form_end(form) }}

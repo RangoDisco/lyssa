@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Doctor index{% endblock %}
+
+{% block body %}
+    <h1>Doctor index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>DeletedAt</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for doctor in doctors %}
+            <tr>
+                <td>{{ doctor.id }}</td>
+                <td>{{ doctor.name }}</td>
+                <td>{{ doctor.deletedAt ? doctor.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ doctor.createdAt ? doctor.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ doctor.updatedAt ? doctor.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <twig:Button as="a" href="{{ path('app_doctor_show', {'id': doctor.id}) }}">show</twig:Button>
+                    <twig:Button variant="outline" as="a" href="{{ path('app_doctor_edit', {'id': doctor.id}) }}">edit</twig:Button>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_doctor_new') }}">Create new</a>
+{% endblock %}
