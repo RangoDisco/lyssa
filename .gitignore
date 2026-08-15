@@ -26,6 +26,7 @@
 
 ###> symfony/asset-mapper ###
 /public/assets/
+/public/import
 /assets/vendor/
 ###< symfony/asset-mapper ###
 
