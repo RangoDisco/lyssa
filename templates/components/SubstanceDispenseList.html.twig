@@ -1,7 +1,7 @@
 <div class="flex flex-col gap-4 w-full" {{ attributes }}>
     <div class="flex items-center justify-between ">
         <twig:Typography:H3>Dispenses</twig:Typography:H3>
-        {% if this.dispenses.next < this.dispenses.results|length %}
+        {% if this.dispenses.nextPage %}
             <a class="text-sm text-muted-foreground"
                href="{{ path('app_dispense_index', {substance: substance.id}) }}">See all</a>
         {% endif %}
@@ -10,7 +10,7 @@
         {#                <twig:Toggle variant="outline" class="rounded-full" size="sm" data-model="displayDispensed" aria-label="Display dispensed" pressed>Dispensed</twig:Toggle> #}
     </div>
     <div class="flex flex-col gap-2">
-        {% for dispense in this.dispenses.results %}
+        {% for dispense in this.dispenses %}
             <twig:SubstanceDispenseListItem :dispense="dispense"/>
         {% endfor %}
     </div>

@@ -40,10 +40,10 @@ class DispenseRepository extends ServiceEntityRepository
             $qb->andWhere('pr.patient = :user OR ca.caretaker = :user');
         }
 
-        return $qb->getQuery()->getOneOrNullResult() === null;
+        return $qb->getQuery()->getOneOrNullResult() !== null;
     }
 
-    public function getBySubstance(Substance $substance): QueryBuilder
+    public function createBySubstanceQueryBuilder(Substance $substance): QueryBuilder
     {
         return $this->createQueryBuilder('d')
             ->select('d')

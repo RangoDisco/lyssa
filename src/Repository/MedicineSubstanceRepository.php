@@ -18,7 +18,7 @@ class MedicineSubstanceRepository extends ServiceEntityRepository
         parent::__construct($registry, MedicineSubstance::class);
     }
 
-    public function getBySubstanceQuery(Substance $substance): QueryBuilder
+    public function createBySubstanceQueryBuilder(Substance $substance): QueryBuilder
     {
         return $this->createQueryBuilder('ms')
             ->where('ms.substance = :substance')
