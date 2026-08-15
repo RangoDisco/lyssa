@@ -9,6 +9,7 @@
         "php": ">=8.5.7",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-intl": "*",
         "doctrine/doctrine-bundle": "^3.2",
         "doctrine/doctrine-migrations-bundle": "^4.0",
         "doctrine/orm": "^3.6",
@@ -27,12 +28,14 @@
         "symfony/property-access": "8.1.*",
         "symfony/property-info": "8.1.*",
         "symfony/runtime": "8.1.*",
+        "symfony/scaleway-mailer": "8.1.*",
         "symfony/security-bundle": "8.1.*",
         "symfony/security-csrf": "8.1.*",
         "symfony/serializer": "8.1.*",
         "symfony/stimulus-bundle": "^3.2",
         "symfony/translation": "8.1.*",
         "symfony/twig-bundle": "8.1.*",
+        "symfony/uid": "8.1.*",
         "symfony/ux-dropzone": "*",
         "symfony/ux-icons": "^3.2",
         "symfony/ux-live-component": "^3.2",
@@ -43,8 +46,7 @@
         "symfonycasts/verify-email-bundle": "^1.18",
         "tales-from-a-dev/twig-tailwind-extra": "^1.0.0",
         "twig/extra-bundle": "*",
-        "twig/html-extra": "^3.12.0",
-        "ext-intl": "*"
+        "twig/html-extra": "^3.12.0"
     },
     "config": {
         "allow-plugins": {

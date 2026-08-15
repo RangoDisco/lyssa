@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Invitation index{% endblock %}
+
+{% block body %}
+    <h1>Invitation index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>AccessLevel</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for invitation in invitations %}
+            <tr>
+                <td>{{ invitation.email }}</td>
+                <td>{{ invitation.accessLevel.value }}</td>
+                <td>
+                    <a href="{{ path('app_invitation_show', {'id': invitation.id}) }}">show</a>
+                    <a href="{{ path('app_invitation_edit', {'id': invitation.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_invitation_new') }}">Create new</a>
+{% endblock %}
