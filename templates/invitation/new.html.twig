@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Invite a caretaker{% endblock %}
+
+{% block body %}
+    <h1>Invite a new caretaker</h1>
+
+    {{ include('invitation/_form.html.twig') }}
+
+    <a href="{{ path('app_invitation_index') }}">back to list</a>
+{% endblock %}
