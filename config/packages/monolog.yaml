@@ -1,0 +1,15 @@
+services:
+    Sentry\Monolog\Handler:
+        arguments:
+            $hub: '@Sentry\State\HubInterface'
+            $level: !php/const Monolog\Level::Error
+            $fillExtraContext: true
+    Sentry\SentryBundle\Monolog\LogsHandler:
+        arguments:
+            - !php/const Monolog\Level::Info
+            -
+monolog:
+    handlers:
+        sentry_logs:
+            type: service
+            id: Sentry\SentryBundle\Monolog\LogsHandler
