@@ -8,15 +8,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 class PaginationRequest
 {
 
-    #[Assert\Positive]
+    #[Assert\Positive(message: 'Page should be a positive number.')]
     public int $page = 1;
 
-    #[Assert\Positive]
+    #[Assert\Positive(message: 'Limit should be a positive number.')]
     public int $limit = 10;
 
     public ?string $sort = null;
 
-    #[Assert\Choice(callback: 'getDirections')]
+    #[Assert\Choice(callback: 'getDirections', message: 'Direction should either be ASC or DESC.')]
     public string $direction = 'DESC';
 
     public function getOffset(): int
