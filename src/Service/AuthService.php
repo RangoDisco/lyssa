@@ -7,17 +7,16 @@ use App\Enum\UserRole;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class AuthService
+readonly class AuthService
 {
 
     public function __construct(
-        private readonly UserPasswordHasherInterface     $userPasswordHasher,
-        private readonly EntityManagerInterface $em,
+        private UserPasswordHasherInterface $userPasswordHasher,
+        private EntityManagerInterface      $em,
     )
     {
     }
 
-    // TODO: Handle non unique email/username
     public function register(string $email, string $username, string $password): User
     {
         $user = new User()
