@@ -54,13 +54,13 @@ readonly class InvitationService
         $user = $this->auth->register($invitation->getEmail(), $username, $password);
 
         // Add to caretakers
-
         $ca = new CaretakingAccess()
             ->setCaretaker($user)
             ->setPatient($invitation->getPatient())
             ->setLevel($invitation->getAccessLevel());
 
         $this->em->persist($ca);
+        $this->em->remove($invitation);
         $this->em->flush();
 
         return $user;
