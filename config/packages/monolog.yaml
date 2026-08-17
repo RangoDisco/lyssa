@@ -7,7 +7,6 @@ services:
     Sentry\SentryBundle\Monolog\LogsHandler:
         arguments:
             - !php/const Monolog\Level::Info
-            -
 monolog:
     handlers:
         sentry_logs:
