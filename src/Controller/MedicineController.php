@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
+use App\DTO\Pagination\PaginationRequest;
 use App\Entity\Medicine;
 use App\Form\MedicineType;
-use App\Repository\MedicineRepository;
+use App\Service\MedicineService;
 use App\Service\Uploader;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -22,10 +24,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class MedicineController extends AbstractController
 {
     #[Route(name: 'app_medicine_index', methods: ['GET'])]
-    public function index(MedicineRepository $medicineRepository): Response
+    public function index(
+        MedicineService $medicineService,
+        #[MapQueryString] PaginationRequest $pagination
+    ): Response
     {
         return $this->render('medicine/index.html.twig', [
-            'medicines' => $medicineRepository->findAll(),
+            'medicines' => $medicineService->getAccessible($this->getUser(), $pagination),
         ]);
     }
 

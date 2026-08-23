@@ -7,25 +7,19 @@
 
     <table class="table">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Format</th>
-                <th>DeletedAt</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>Name</th>
+            <th>Format</th>
+            <th>CreatedAt</th>
+            <th>actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for medicine in medicines %}
             <tr>
-                <td>{{ medicine.id }}</td>
                 <td>{{ medicine.name }}</td>
                 <td>{{ medicine.format.value }}</td>
-                <td>{{ medicine.deletedAt ? medicine.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ medicine.createdAt ? medicine.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ medicine.updatedAt ? medicine.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('app_medicine_show', {'id': medicine.id}) }}">show</a>
                     <a href="{{ path('app_medicine_edit', {'id': medicine.id}) }}">edit</a>
@@ -38,6 +32,9 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <twig:Paginator result="{{ medicines }}"/>
+
 
     <a href="{{ path('app_medicine_new') }}">Create new</a>
 {% endblock %}

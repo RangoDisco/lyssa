@@ -7,11 +7,11 @@
 
     <table class="table">
         <thead>
-            <tr>
-                <th>Email</th>
-                <th>AccessLevel</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>Email</th>
+            <th>AccessLevel</th>
+            <th>actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for invitation in invitations %}
@@ -20,7 +20,6 @@
                 <td>{{ invitation.accessLevel.value }}</td>
                 <td>
                     <a href="{{ path('app_invitation_show', {'id': invitation.id}) }}">show</a>
-                    <a href="{{ path('app_invitation_edit', {'id': invitation.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -30,6 +29,7 @@
         {% endfor %}
         </tbody>
     </table>
+    <twig:Paginator :result="invitations"/>
 
     <a href="{{ path('app_invitation_new') }}">Create new</a>
 {% endblock %}

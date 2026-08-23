@@ -30,7 +30,7 @@ class PaginatedResult implements IteratorAggregate, Countable
 
     public function getTotalPages(): int
     {
-        return max(1, ceil($this->count() / $this->limit));
+        return max(1, (int)ceil($this->count() / $this->limit));
     }
 
     public function getPreviousPage(): ?int
@@ -42,5 +42,4 @@ class PaginatedResult implements IteratorAggregate, Countable
     {
         return $this->page < $this->getTotalPages() ? $this->page + 1 : null;
     }
-
 }

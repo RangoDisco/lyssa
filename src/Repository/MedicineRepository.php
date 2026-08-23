@@ -7,6 +7,7 @@ use App\Entity\Medicine;
 use App\Entity\Substance;
 use App\Entity\User;
 use App\Enum\CaretakerAccessLevel;
+use App\Enum\Source;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -47,6 +48,16 @@ class MedicineRepository extends ServiceEntityRepository
             ->innerJoin('ms.substance', 's')
             ->where('s = :substance')
             ->setParameter('substance', $substance);
+    }
+
+    public function createAccessibleQueryBuilder(User $user): QueryBuilder {
+        return $this->createQueryBuilder('m')
+            ->leftJoin(CaretakingAccess::class, 'ca', 'ON', 'ca.patient = m.owner')
+            ->where('ca.caretaker = :user')
+            ->orWhere('m.owner = :user')
+            ->orWhere('m.source = :source')
+            ->setParameter('user', $user)
+            ->setParameter('source', Source::Official);
     }
 
     //    /**

@@ -1,0 +1,30 @@
+<div {{ attributes }}>
+    <twig:Pagination>
+        <twig:Pagination:Content>
+            {% if outerScope.outerScope.result.getPreviousPage %}
+                <twig:Pagination:Item>
+                    <twig:Pagination:Previous href="?page={{ outerScope.outerScope.result.getPreviousPage }}"/>
+                </twig:Pagination:Item>
+            {% endif %}
+
+            {% for page in outerScope.outerScope.this.pages %}
+                <twig:Pagination:Item>
+                    {% if page.isEllipsis %}
+                        <twig:Pagination:Ellipsis/>
+                    {% else %}
+                        <twig:Pagination:Link
+                            active="{{ page.isActive }}"
+                            href="?page={{ page.position }}">{{ page.position }}
+                        </twig:Pagination:Link>
+                    {% endif %}
+                </twig:Pagination:Item>
+            {% endfor %}
+
+            {% if outerScope.outerScope.result.getNextPage %}
+                <twig:Pagination:Item>
+                    <twig:Pagination:Next href="?page={{ outerScope.outerScope.result.getNextPage }}"/>
+                </twig:Pagination:Item>
+            {% endif %}
+        </twig:Pagination:Content>
+    </twig:Pagination>
+</div>
